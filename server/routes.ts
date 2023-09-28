@@ -64,7 +64,16 @@ class Routes {
   async deletePost(session: WebSessionDoc, _id: ObjectId) {
     // TODO 3: Delete the post with given _id
     // Make sure the user deleting is the author of the post
-    throw new Error("Not implemented!");
+    const user = WebSession.getUser(session);
+    const post = await Post.read({_id})
+    console.log('user',user)
+    console.log('post:',post)
+    if (post.length && post[0].author == user){
+        return await Post.delete(_id)
+    }
+    else{
+      throw Error('Not the author')
+    }
   }
 }
 
